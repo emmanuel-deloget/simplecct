@@ -3,7 +3,7 @@
 . config.sh
 
 for p in make gcc quilt; do
-	if ! which ${p}; then
+	if ! which ${p} > /dev/null 2>&1; then
 		error "PREREQ: ${p} is not installed on your system"
 	fi
 done
