@@ -33,6 +33,14 @@ for opt in "$@"; do
 	clean)
 		rm -rf ${STAGINGDIR} ${BUILDDIR} ${SRCDIR}/gcc-build ${SRCDIR}/gcc-stage*
 		;;
+	config=*)
+		cf=${opt##config=}
+		[ -f ${CONFDIR}/${cf}.sh ] && {
+			ln -s ${CONFDIR}/${cf}.sh user-config.sh
+		} || {
+			error "configuration <${cf}> does not exist"
+		}
+		;;
 	esac
 done
 
