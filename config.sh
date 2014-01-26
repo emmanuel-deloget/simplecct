@@ -133,3 +133,7 @@ __prepare_gcc() {
 [ -L ${STAGINGDIR}/usr ] || ( cd ${STAGINGDIR} ; ln -s . usr )
 
 export PATH=${STAGINGDIR}/bin:${PATH}
+
+[ -f user-config.sh -o -L user-config.sh ] && {
+	. user-config.sh
+}
