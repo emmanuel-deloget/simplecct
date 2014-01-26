@@ -1,14 +1,7 @@
 #!/bin/sh
 
+# default values
 TARGET="armeb-linux-musleabi"
-LANG=C
-
-TOPDIR=$(pwd)
-DLDIR=${TOPDIR}/.download
-BUILDDIR=${TOPDIR}/.build/${TARGET}
-SRCDIR=${TOPDIR}/.source
-STAGINGDIR=${TOPDIR}/staging/${TARGET}
-PATCHDIR=${TOPDIR}/patches
 
 GMP_VERSION=5.1.3
 MPFR_VERSION=3.1.2
@@ -22,12 +15,27 @@ LIBC_NAME=musl
 LIBC_VERSION=0.9.15
 LIBC_URL=http://www.musl-libc.org/releases/musl-0.9.15.tar.gz
 
-SYSROOT=${STAGINGDIR}
 LINUX_ARCH=arm
 LINUX_DEF_CONFIG=multi_v7_defconfig
 
 GCC_S1_CONFIGURE_ARGS=
 GCC_S2_CONFIGURE_ARGS=
+
+# user values
+[ -f user-config.sh -o -L user-config.sh ] && {
+	. user-config.sh
+}
+
+LANG=C
+
+TOPDIR=$(pwd)
+DLDIR=${TOPDIR}/.download
+BUILDDIR=${TOPDIR}/.build/${TARGET}
+SRCDIR=${TOPDIR}/.source
+STAGINGDIR=${TOPDIR}/staging/${TARGET}
+PATCHDIR=${TOPDIR}/patches
+CONFDIR=${TOPDIR}/patches
+SYSROOT=${STAGINGDIR}
 
 error() {
 	echo $1 1>&2
@@ -133,7 +141,3 @@ __prepare_gcc() {
 [ -L ${STAGINGDIR}/usr ] || ( cd ${STAGINGDIR} ; ln -s . usr )
 
 export PATH=${STAGINGDIR}/bin:${PATH}
-
-[ -f user-config.sh -o -L user-config.sh ] && {
-	. user-config.sh
-}
