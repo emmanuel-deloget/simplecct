@@ -120,34 +120,54 @@ __download_and_untar() {
 	__untar ${product} ${SRCDIR}/${product}
 }
 
+__do_patch() {
+	local pdir=${1}
+	local ddir=${1}
+
+	if ! which quilt > /dev/null 2>&1; then
+		error "quilt is not installed on the system"
+	fi
+
+	if [ -d ${pdir} ]; then
+		mkdir ${ddir}/patches
+		cp ${pdir}/*.patch ${ddir}/patches/
+		(
+			cd ${ddir}/patches/
+			ls -1 *.patch > series
+			cd ${ddir}
+			quilt push -a
+		)
+	fi
+
+	if [ ! -d ${ddir}/.pc ]; then
+		error "no patch were applied in <${SRCDIR}/${dest}>"
+	fi
+}
+
 __patch() {
 	local base=${1}
 	local dest=${2}
 
 	__check_target
 
-	if ! which quilt > /dev/null 2>&1; then
-		error "quilt is not installed on the system"
+	if [ -z "${dest}" ]; then
+		dest=${base}
 	fi
+
+	__do_patch "${PATCHDIR}/${base}" "${SRCDIR}/${dest}"
+}
+
+__patch_after_prepare() {
+	local base=${1}
+	local dest=${2}
+
+	__check_target
 
 	if [ -z "${dest}" ]; then
 		dest=${base}
 	fi
 
-	if [ -d ${PATCHDIR}/${base} ]; then
-		mkdir ${SRCDIR}/${dest}/patches
-		cp ${PATCHDIR}/${base}/*.patch ${SRCDIR}/${dest}/patches/
-		(
-			cd ${SRCDIR}/${dest}/patches/
-			ls -1 *.patch > series
-			cd ${SRCDIR}/${dest}
-			quilt push -a
-		)
-	fi
-
-	if [ ! -d ${SRCDIR}/${dest}/.pc ]; then
-		error "no patch were applied in <${SRCDIR}/${dest}>"
-	fi
+	__do_patch "${PATCHDIR}/${base}" "${BUILDDIR}/${dest}"
 }
 
 __prepare_gcc() {
