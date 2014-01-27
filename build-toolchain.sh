@@ -14,7 +14,7 @@ options are:
 	nostage2: do not build the stage 2 of gcc
 	nolibc: do not build the standard C library
 	nokheaders: do not extract the kernel headers
-	nolinux: do not build the linux kernel
+	norootfs: do not build the rootfs
 	clean: remove all generated files
 	config=CONFIG: use some premade additional configuration.
 	end: stop doing anything after this option
@@ -43,17 +43,17 @@ for opt in "$@"; do
 	nostage1)
 		nsl="${nsl} 20-tc-gcc-stage1.sh"
 		;;
-	nostage2)
-		nsl="${nsl} 50-tc-gcc-stage2.sh"
+	nokheaders)
+		nsl="${nsl} 30-tc-kheaders.sh"
 		;;
 	nolibc)
 		nsl="${nsl} 40-tc-libc.sh"
 		;;
-	nokheaders)
-		nsl="${nsl} 30-tc-kheaders.sh"
+	nostage2)
+		nsl="${nsl} 50-tc-gcc-stage2.sh"
 		;;
-	nolinux)
-		nsl="${nsl} 80-tc-linux.sh"
+	norootfs)
+		nsl="${nsl} 99-tc-image.sh"
 		;;
 	clean)
 		rm -rf ${STAGINGDIR} ${BUILDDIR} ${SRCDIR}/gcc-build ${SRCDIR}/gcc-stage*
