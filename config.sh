@@ -121,7 +121,6 @@ __download_and_untar() {
 }
 
 __patch() {
-	set -x
 	local base=${1}
 	local dest=${2}
 
