@@ -58,7 +58,7 @@ if [ -n "${TARGET}" ]; then
 	BUILDDIR=${TOPDIR}/.build/${TARGET}
 	STAGINGDIR=${TOPDIR}/staging/${TARGET}/host
 	ROOTDIR=${TOPDIR}/staging/${TARGET}/target
-	SYSROOT=${STAGINGDIR}
+	SYSROOT=${STAGINGDIR}/${TARGET}
 fi
 
 error() {
@@ -195,7 +195,8 @@ __prepare_gcc() {
 if [ -n "${TARGET}" ]; then
 	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
 	[ -d ${STAGINGDIR} ] || mkdir -p ${STAGINGDIR}
-	[ -L ${STAGINGDIR}/usr ] || ( cd ${STAGINGDIR} ; ln -s . usr )
+	[ -d ${SYSROOT} ] || mkdir -p ${SYSROOT}
+	[ -e ${SYSROOT}/usr ] || ln -s . ${SYSROOT}/usr
 fi
 
 export PATH=${STAGINGDIR}/bin:${PATH}

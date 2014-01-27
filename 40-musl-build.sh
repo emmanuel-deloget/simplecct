@@ -31,7 +31,7 @@ __untar ${LIBC_NAME}-${LIBC_VERSION} ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION}
 		--target=${TARGET} \
 		--disable-gcc-wrapper \
 		--enable-debug \
-		--prefix=${STAGINGDIR} \
+		--prefix=${SYSROOT} \
 		--target=${TARGET} \
 		--with-sysroot=${SYSROOT}
 

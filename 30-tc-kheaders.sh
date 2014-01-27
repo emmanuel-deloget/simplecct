@@ -35,7 +35,7 @@ if [ -n "${SABOTAGE_KH_VERSION}" ]; then
 
 	make -C ${BUILDDIR}/kernel-headers 	\
 		ARCH=${LINUX_ARCH}		\
-		DESTDIR=${STAGINGDIR}		\
+		DESTDIR=${SYSROOT}		\
 		prefix=/usr			\
 		install
 
@@ -53,6 +53,6 @@ else
 		V=1 \
 		ARCH=${LINUX_ARCH} \
 		CROSS_COMPILE=${TARGET}- \
-		INSTALL_HDR_PATH=${STAGINGDIR} \
+		INSTALL_HDR_PATH=${SYSROOT} \
 		headers_install
 fi
