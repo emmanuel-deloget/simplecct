@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # default values
-TARGET="armeb-linux-musleabi"
-
 GMP_VERSION=5.1.3
 MPFR_VERSION=3.1.2
 MPC_VERSION=1.0.1
@@ -15,8 +13,9 @@ LIBC_NAME=musl
 LIBC_VERSION=0.9.15
 LIBC_URL=http://www.musl-libc.org/releases/musl-0.9.15.tar.gz
 
-LINUX_ARCH=arm
-LINUX_DEF_CONFIG=multi_v7_defconfig
+TARGET=
+LINUX_ARCH=
+LINUX_DEF_CONFIG=
 
 GCC_S1_CONFIGURE_ARGS=
 GCC_S2_CONFIGURE_ARGS=
@@ -27,24 +26,36 @@ GCC_S2_CONFIGURE_ARGS=
 }
 
 LANG=C
-
 TOPDIR=$(pwd)
+
 DLDIR=${TOPDIR}/.download
-BUILDDIR=${TOPDIR}/.build/${TARGET}
 SRCDIR=${TOPDIR}/.source
-STAGINGDIR=${TOPDIR}/staging/${TARGET}
 PATCHDIR=${TOPDIR}/patches
-CONFDIR=${TOPDIR}/patches
-SYSROOT=${STAGINGDIR}
+CONFDIR=${TOPDIR}/configs
+
+if [ -n "${TARGET}" ]; then
+	BUILDDIR=${TOPDIR}/.build/${TARGET}
+	STAGINGDIR=${TOPDIR}/staging/${TARGET}/host
+	ROOTDIR=${TOPDIR}/staging/${TARGET}/target
+	SYSROOT=${STAGINGDIR}
+fi
 
 error() {
 	echo $1 1>&2
 	exit 1
 }
 
+__check_target() {
+	[ -n "${TARGET}" ] || {
+		error "TARGET is empty, I cannot build a cross-compiler"
+	}
+}
+
 __configure() {
 	local product=${1}
 	shift
+
+	__check_target
 
 	if [ ! -f ${SRCDIR}/${product}/configure ]; then
 		error "product <${product}> has no configure script"
@@ -68,10 +79,13 @@ __untar() {
 
 	echo "decompressing <${file}> to <${dest}>"
 
-	mkdir -p ${dest}
-	tar xf ${file} --strip-components=1 -C ${dest} || {
-		error "cannot extract <${file}> to <${dest}>"
-	}
+	if [ ! -f ${dest}/.untarred ]; then
+		mkdir -p ${dest}
+		tar xf ${file} --strip-components=1 -C ${dest} || {
+			error "cannot extract <${file}> to <${dest}>"
+		}
+		touch ${dest}/.untarred
+	fi
 }
 
 __download_and_untar() {
@@ -82,12 +96,7 @@ __download_and_untar() {
 	if [ ! -f ${DLDIR}/${file} ]; then
 		wget ${url} -O ${DLDIR}/${file} || error "cannot download <${url}>"
 	fi
-	rm -rf ${SRCDIR}/${product}
-	mkdir ${SRCDIR}/${product}
-	echo "decompressing <${DLDIR}/${file}> to <${SRCDIR}/${product}>"
-	tar xf ${DLDIR}/${file} --strip-components=1 -C ${SRCDIR}/${product} || {
-		error "cannot extract <${url}> to <${SRCDIR}/${product}>"
-	}
+	__untar ${product} ${SRCDIR}/${product}
 }
 
 __patch() {
@@ -95,7 +104,9 @@ __patch() {
 	local base=${1}
 	local dest=${2}
 
-	if ! which quilt; then
+	__check_target
+
+	if ! which quilt > /dev/null 2>&1; then
 		error "quilt is not installed on the system"
 	fi
 
@@ -122,6 +133,8 @@ __patch() {
 __prepare_gcc() {
 	local product=${1}
 
+	__check_target
+
 	if [ ! -f  ${SRCDIR}/gcc-build/.prepared ]; then
 		mkdir -p ${SRCDIR}/gcc-build
 		__untar gcc-${GCC_VERSION} ${SRCDIR}/gcc-build
@@ -135,9 +148,12 @@ __prepare_gcc() {
 }
 
 [ -d ${DLDIR} ] || mkdir -p ${DLDIR}
-[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
 [ -d ${SRCDIR} ] || mkdir -p ${SRCDIR}
-[ -d ${STAGINGDIR} ] || mkdir -p ${STAGINGDIR}
-[ -L ${STAGINGDIR}/usr ] || ( cd ${STAGINGDIR} ; ln -s . usr )
+
+if [ -n "${TARGET}" ]; then
+	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
+	[ -d ${STAGINGDIR} ] || mkdir -p ${STAGINGDIR}
+	[ -L ${STAGINGDIR}/usr ] || ( cd ${STAGINGDIR} ; ln -s . usr )
+fi
 
 export PATH=${STAGINGDIR}/bin:${PATH}

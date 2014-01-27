@@ -17,6 +17,7 @@ options are:
 	nolinux: do not build the linux kernel
 	clean: remove all generated files
 	config=CONFIG: use some premade additional configuration.
+	end: stop doing anything after this option
 
 The following additions configuration are available:
 	$(cd configs && ls -1 *.sh | sed 's:\.sh::g')
@@ -56,14 +57,19 @@ for opt in "$@"; do
 		;;
 	clean)
 		rm -rf ${STAGINGDIR} ${BUILDDIR} ${SRCDIR}/gcc-build ${SRCDIR}/gcc-stage*
+		[ -L user-config.sh ] && rm -f user-config.sh
 		;;
 	config=*)
 		cf=${opt##config=}
 		[ -f ${CONFDIR}/${cf}.sh ] && {
 			ln -s ${CONFDIR}/${cf}.sh user-config.sh
+			. config.sh
 		} || {
 			error "configuration <${cf}> does not exist"
 		}
+		;;
+	end)
+		exit 0
 		;;
 	help)
 		usage $(basename ${0})
