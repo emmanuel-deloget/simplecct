@@ -23,17 +23,30 @@
 
 . config.sh
 
-__untar linux-${LINUX_VERSION} ${BUILDDIR}/kernel-headers
+if [ -n "${SABOTAGE_KH_VERSION}" ]; then
+	# if we want to use sabotage, just do it!
+	__untar kernel-headers-${SABOTAGE_KH_VERSION} ${BUILDDIR}/kernel-headers
 
-make -C ${BUILDDIR}/kernel-headers \
-	V=1 \
-	ARCH=${LINUX_ARCH} \
-	CROSS=${TARGET}- \
-	${LINUX_DEF_CONFIG}
+	make -C ${BUILDDIR}/kernel-headers 	\
+		ARCH=${LINUX_ARCH}		\
+		DESTDIR=${STAGINGDIR}		\
+		prefix=/usr			\
+		install
 
-make -C ${BUILDDIR}/kernel-headers \
-	V=1 \
-	ARCH=${LINUX_ARCH} \
-	CROSS=${TARGET}- \
-	INSTALL_HDR_PATH=${STAGINGDIR} \
-	headers_install
+else
+	# standard behavior
+	__untar linux-${LINUX_VERSION} ${BUILDDIR}/kernel-headers
+
+	make -C ${BUILDDIR}/kernel-headers \
+		V=1 \
+		ARCH=${LINUX_ARCH} \
+		CROSS_COMPILE=${TARGET}- \
+		${LINUX_DEF_CONFIG}
+
+	make -C ${BUILDDIR}/kernel-headers \
+		V=1 \
+		ARCH=${LINUX_ARCH} \
+		CROSS_COMPILE=${TARGET}- \
+		INSTALL_HDR_PATH=${STAGINGDIR} \
+		headers_install
+fi

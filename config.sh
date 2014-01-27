@@ -114,6 +114,8 @@ __download_and_untar() {
 	local url=${2}
 	local file=$(basename ${url})
 
+	[ -n "${3}" ] && file=${3}
+
 	if [ ! -f ${DLDIR}/${file} ]; then
 		wget ${url} -O ${DLDIR}/${file} || error "cannot download <${url}>"
 	fi

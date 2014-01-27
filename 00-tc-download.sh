@@ -31,3 +31,10 @@ __download_and_untar gcc-${GCC_VERSION} http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER
 __download_and_untar linux-${LINUX_VERSION} https://www.kernel.org/pub/linux/kernel/v3.x/linux-${LINUX_VERSION}.tar.xz
 __download_and_untar ${LIBC_NAME}-${LIBC_VERSION} ${LIBC_URL}
 __download_and_untar busybox-${BUSYBOX_VERSION} http://busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2
+
+if [ -n "${SABOTAGE_KH_VERSION}" ]; then
+	# these are needed to successfully compile busybox
+	__download_and_untar kernel-headers-${SABOTAGE_KH_VERSION} \
+		https://github.com/sabotage-linux/kernel-headers/archive/v${SABOTAGE_KH_VERSION}.tar.gz \
+		kernel-headers-${SABOTAGE_KH_VERSION}.tar.gz
+fi

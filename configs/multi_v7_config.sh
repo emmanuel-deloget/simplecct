@@ -51,6 +51,9 @@ BINUTILS_VERSION=2.24
 # we are using the latest kernel to build our toolchain
 LINUX_VERSION=3.13
 
+# a new breed of kernel headers
+SABOTAGE_KH_VERSION=3.12.6-1
+
 # we are able to compile busybox
 BUSYBOX_VERSION=1.22.0
 
