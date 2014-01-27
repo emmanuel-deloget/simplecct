@@ -13,6 +13,6 @@ __configure gcc-stage2 \
 	--disable-libsanitizer \
 	$(GCC_S2_CONFIGURE_ARGS)
 
-make ${MAKEJOBS} -C ${BUILDDIR}/gcc-stage2 all install
+make -C ${BUILDDIR}/gcc-stage2 all install
 
 

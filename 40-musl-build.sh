@@ -14,7 +14,7 @@ __untar ${LIBC_NAME}-${LIBC_VERSION} ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION}
 		--target=${TARGET} \
 		--with-sysroot=${SYSROOT}
 
-	make ${MAKEJOBS} -C ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION} \
+	make -C ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION} \
 		all \
 		install
 )

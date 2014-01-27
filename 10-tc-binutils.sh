@@ -7,4 +7,4 @@ __configure binutils-${BINUTILS_VERSION} \
 	--prefix=${STAGINGDIR} \
 	--with-sysroot=${SYSROOT}
 
-make ${MAKEJOBS} -C ${BUILDDIR}/binutils-${BINUTILS_VERSION} all install
+make -C ${BUILDDIR}/binutils-${BINUTILS_VERSION} all install

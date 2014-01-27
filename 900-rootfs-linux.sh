@@ -11,7 +11,7 @@ __untar linux-${LINUX_VERSION} ${BUILDDIR}/linux-${LINUX_VERSION}
 		ARCH=${LINUX_ARCH} 		\
 		CROSS_COMPILE=${TARGET}- 	\
 		${LINUX_DEF_CONFIG}
-	make ${MAKEJOBS} \
+	make \
 		V=1				\
 		ARCH=${LINUX_ARCH} 		\
 		CROSS_COMPILE=${TARGET}-

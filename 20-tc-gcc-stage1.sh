@@ -24,4 +24,4 @@ __configure gcc-stage1 \
 	$(GCC_S1_CONFIGURE_ARGS)
 
 export SHELL=/bin/bash
-make ${MAKEJOBS} -C ${BUILDDIR}/gcc-stage1 all-gcc all-target-libgcc install-gcc install-target-libgcc
+make -C ${BUILDDIR}/gcc-stage1 all-gcc all-target-libgcc install-gcc install-target-libgcc
