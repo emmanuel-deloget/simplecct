@@ -55,7 +55,7 @@ LINUX_VERSION=3.13
 SABOTAGE_KH_VERSION=3.12.6-1
 
 # we are able to compile busybox
-BUSYBOX_VERSION=1.22.0
+BUSYBOX_VERSION=1.22.1
 
 # we are basing this toolchain on musl
 LIBC_NAME=musl
