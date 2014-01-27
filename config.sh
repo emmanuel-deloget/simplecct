@@ -142,7 +142,7 @@ __do_patch() {
 	fi
 
 	if [ ! -d ${ddir}/.pc ]; then
-		error "no patch were applied in <${SRCDIR}/${dest}>"
+		error "no patch were applied in <${ddir}>"
 	fi
 }
 
