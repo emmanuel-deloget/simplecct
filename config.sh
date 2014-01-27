@@ -124,7 +124,7 @@ __download_and_untar() {
 
 __do_patch() {
 	local pdir=${1}
-	local ddir=${1}
+	local ddir=${2}
 
 	if ! which quilt > /dev/null 2>&1; then
 		error "quilt is not installed on the system"
