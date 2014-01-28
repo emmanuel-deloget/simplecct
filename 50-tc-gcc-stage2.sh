@@ -32,7 +32,7 @@ __configure gcc-stage2 \
 	--with-sysroot=${SYSROOT} \
 	--disable-libmudflap \
 	--disable-libsanitizer \
-	$(GCC_S2_CONFIGURE_ARGS)
+	${GCC_S2_CONFIGURE_ARGS}
 
 make -C ${BUILDDIR}/gcc-stage2 all install
 

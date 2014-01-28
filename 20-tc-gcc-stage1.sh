@@ -42,7 +42,7 @@ __configure gcc-stage1 \
 	--disable-libatomic \
 	--with-newlib \
 	--without-headers \
-	$(GCC_S1_CONFIGURE_ARGS)
+	${GCC_S1_CONFIGURE_ARGS}
 
 export SHELL=/bin/bash
 make -C ${BUILDDIR}/gcc-stage1 all-gcc all-target-libgcc install-gcc install-target-libgcc
