@@ -25,6 +25,7 @@
 
 __prepare_gcc gcc-stage1
 
+CFLAGS="-g -O0" CPPFLAGS="-g -O0" CXXFLAGS="-g -O0" \
 __configure gcc-stage1 \
 	--prefix=${STAGINGDIR} \
 	--target=${TARGET} \
