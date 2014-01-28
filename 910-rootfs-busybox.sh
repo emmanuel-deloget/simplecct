@@ -30,7 +30,30 @@ make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
 	CROSS_COMPILE=${TARGET}- \
 	ARCH=${TARGET} \
 	CONFIG_ROOT=${ROOTDIR} \
-	defconfig
+	allyesconfig
+
+# musl need some extra work to have everything ok
+# see http://wiki.musl-libc.org/wiki/Building_Busybox
+if [ "${LIBC_NAME}" = "musl" ]; then
+	remove=""
+	remove="${remove} EXTRA_COMPAT SELINUX FEATURE_HAVE_RPC WERROR"
+	remove="${remove} FEATURE_SYSTEMD FEATURE_VI_REGEX_SEARCH PAM"
+	remove="${remove} FEATURE_INETD_RPC SELINUXENABLED"
+	remove="${remove} FEATURE_MOUNT_NFS"
+	cp ${BUILDDIR}/busybox-${BUSYBOX_VERSION}/.config ${BUILDDIR}/busybox-${BUSYBOX_VERSION}/.unsed-config
+	for v in ${remove} ; do
+		sed -i 's:^\(CONFIG_'$v'\).*$:# \1 is not set:' ${BUILDDIR}/busybox-${BUSYBOX_VERSION}/.config
+	done
+
+	make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
+		V=1 \
+		CROSS_COMPILE=${TARGET}- \
+		ARCH=${TARGET} \
+		CONFIG_ROOT=${ROOTDIR} \
+		oldconfig
+fi
+
+__patch_after_prepare busybox-${BUSYBOX_VERSION}
 
 make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
 	V=1 \
