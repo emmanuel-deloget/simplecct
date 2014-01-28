@@ -3,7 +3,7 @@
 # ======================================================================
 #
 # simplecct: a series of scripts to build cross-compilation toolchains
-# Copyright (C) 2014 Emmanuel Delogte
+# Copyright (C) 2014 Emmanuel Deloget
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
