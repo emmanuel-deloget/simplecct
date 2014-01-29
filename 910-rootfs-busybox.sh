@@ -23,7 +23,7 @@
 
 . config.sh
 
-__untar busybox-${BUSYBOX_VERSION} ${BUILDDIR}/busybox-${BUSYBOX_VERSION}
+__prepare_source busybox-${BUSYBOX_VERSION}
 
 make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
 	V=1 \

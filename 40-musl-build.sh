@@ -23,7 +23,7 @@
 
 . config.sh
 
-__untar ${LIBC_NAME}-${LIBC_VERSION} ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION}
+__prepare_source ${LIBC_NAME}-${LIBC_VERSION}
 
 (
 	cd ${BUILDDIR}/${LIBC_NAME}-${LIBC_VERSION}

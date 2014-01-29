@@ -25,7 +25,7 @@
 
 if [ -n "${SABOTAGE_KH_VERSION}" ]; then
 	# if we want to use sabotage, just do it!
-	__untar kernel-headers-${SABOTAGE_KH_VERSION} ${BUILDDIR}/kernel-headers
+	__prepare_source kernel-headers-${SABOTAGE_KH_VERSION} kernel-headers
 
 	# sh4rm4: the latest sabotage tarball is broken
 	# it's missing a few commits (applied as patches)
@@ -41,7 +41,7 @@ if [ -n "${SABOTAGE_KH_VERSION}" ]; then
 
 else
 	# standard behavior
-	__untar linux-${LINUX_VERSION} ${BUILDDIR}/kernel-headers
+	__prepare_source linux-${LINUX_VERSION} kernel-headers
 
 	make -C ${BUILDDIR}/kernel-headers \
 		V=1 \

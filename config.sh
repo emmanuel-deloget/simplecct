@@ -109,6 +109,23 @@ __untar() {
 	fi
 }
 
+__prepare_source() {
+	local product=${1}
+	local dest=${2}
+
+	if [ -z "${dest}" ]; then
+		dest=${product}
+	fi
+
+	if [ ! -d ${SRCDIR}/${product} ]; then
+		error "product <${product}> is unknown"
+	fi
+
+	cp -fpR ${SRCDIR}/${product} ${BUILDDIR}/${dest} || {
+		error "failed to copy product <${product}> to <${BUILDDIR}/${dest}>"
+	}
+}
+
 __download_and_untar() {
 	local product=${1}
 	local url=${2}

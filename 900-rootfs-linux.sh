@@ -23,7 +23,7 @@
 
 . config.sh
 
-__untar linux-${LINUX_VERSION} ${BUILDDIR}/linux-${LINUX_VERSION}
+__prepare_source linux-${LINUX_VERSION}
 
 (
 	cd ${BUILDDIR}/linux-${LINUX_VERSION}
