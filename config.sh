@@ -53,6 +53,8 @@ DLDIR=${TOPDIR}/.download
 SRCDIR=${TOPDIR}/.source
 PATCHDIR=${TOPDIR}/patches
 CONFDIR=${TOPDIR}/sample-configs
+LOGDIR=${TOPDIR}/.log
+TOOLDIR=${TOPDIR}/tools
 
 if [ -n "${TARGET}" ]; then
 	BUILDDIR=${TOPDIR}/.build/${TARGET}
@@ -121,9 +123,12 @@ __prepare_source() {
 		error "product <${product}> is unknown"
 	fi
 
-	cp -fpR ${SRCDIR}/${product} ${BUILDDIR}/${dest} || {
-		error "failed to copy product <${product}> to <${BUILDDIR}/${dest}>"
-	}
+	if [ ! -f ${BUILDDIR}/${dest}/.copy-prepared ]; then
+		cp -fpR ${SRCDIR}/${product} ${BUILDDIR}/ || {
+			error "failed to copy product <${product}> to <${BUILDDIR}/${dest}>"
+		}
+		touch ${BUILDDIR}/${dest}/.copy-prepared
+	fi
 }
 
 __download_and_untar() {
