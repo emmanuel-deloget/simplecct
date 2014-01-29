@@ -54,6 +54,9 @@ done
 
 nsl=""
 
+save_log=no
+show_log=no
+
 for opt in "$@"; do
 	case ${opt} in
 	nodl)
@@ -76,6 +79,12 @@ for opt in "$@"; do
 		;;
 	norootfs)
 		nsl="${nsl} 99-tc-image.sh"
+		;;
+	savelog)
+		save_log=yes
+		;;
+	showlog)
+		show_log=yes
 		;;
 	clean)
 		rm -rf ${STAGINGDIR} ${BUILDDIR} ${SRCDIR}/gcc-build ${SRCDIR}/gcc-stage*
@@ -104,6 +113,15 @@ done
 
 for script in [0-9][0-9]-tc-*.sh; do
 	if ! echo ${nsl} | grep -q ${script}; then
-		. ${script}
+		if [ $(echo ${script} | awk -F '-' '{ print $1 }') -lt ${maxscript} ]; then
+			if [ "${save_log}" = "yes" ]; then
+				mkdir -p ${LOGDIR}
+				. ${script} > ${LOGDIR}/${script}.log
+			elif [ "${show_log}" = "yes" ]; then
+				. ${script}
+			else
+				. ${script} > /dev/null
+			fi
+		fi
 	fi
 done
