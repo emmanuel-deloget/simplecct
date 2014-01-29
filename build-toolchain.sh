@@ -85,7 +85,7 @@ for opt in "$@"; do
 	config=*)
 		cf=${opt##config=}
 		if [ -f ${CONFDIR}/${cf}.sh ]; then
-			if [ ! -L user-config.sh ]; then
+			if [ -e user-config.sh -a ! -L user-config.sh ]; then
 				error "user configuration cannot be changed, it's not a link"
 			fi
 			ln -sf ${CONFDIR}/${cf}.sh user-config.sh
