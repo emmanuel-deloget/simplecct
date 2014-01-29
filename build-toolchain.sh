@@ -56,6 +56,7 @@ nsl=""
 
 save_log=no
 show_log=no
+maxscript=100
 
 for opt in "$@"; do
 	case ${opt} in
@@ -78,7 +79,7 @@ for opt in "$@"; do
 		nsl="${nsl} 50-tc-gcc-stage2.sh"
 		;;
 	norootfs)
-		nsl="${nsl} 99-tc-image.sh"
+		maxscript=90
 		;;
 	savelog)
 		save_log=yes
