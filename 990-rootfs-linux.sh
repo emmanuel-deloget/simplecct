@@ -32,8 +32,18 @@ __prepare_source linux-${LINUX_VERSION}
 		ARCH=${LINUX_ARCH} 		\
 		CROSS_COMPILE=${TARGET}- 	\
 		${LINUX_DEF_CONFIG}
+
 	make \
 		V=1				\
 		ARCH=${LINUX_ARCH} 		\
-		CROSS_COMPILE=${TARGET}-
+		CROSS_COMPILE=${TARGET}-	\
+		all zImage
+	[ $? -eq 0 ] || {
+		error "kernel: failed to build the kernel zImage"
+	}
+
+	# we need to do something to install the beast in ${ROOTDIR}
+	# but we cannot use any install rule from the kernel
+	# Makefile as it will use /sbin/installkernel whatever we
+	# do (weird but true)
 )
