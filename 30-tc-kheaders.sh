@@ -24,14 +24,15 @@
 . config.sh
 
 if [ -n "${SABOTAGE_KH_VERSION}" ]; then
+	# rofl0r@sabotage: the latest sabotage tarball is
+	# broken, it's missing a few commits (applied as
+	# patches)
+	__patch kernel-headers-${SABOTAGE_KH_VERSION} || {
+		error "build: I cannot patch <kernel-headers-${SABOTAGE_KH_VERSION}>"
+	}
+
 	# if we want to use sabotage, just do it!
 	__prepare_source kernel-headers-${SABOTAGE_KH_VERSION} kernel-headers
-
-	# sh4rm4: the latest sabotage tarball is broken
-	# it's missing a few commits (applied as patches)
-	__patch_after_prepare \
-		kernel-headers-${SABOTAGE_KH_VERSION} \
-		kernel-headers
 
 	make -C ${BUILDDIR}/kernel-headers 	\
 		ARCH=${LINUX_ARCH}		\
