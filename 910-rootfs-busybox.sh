@@ -23,6 +23,8 @@
 
 . config.sh
 
+__patch busybox-${BUSYBOX_VERSION}
+
 __prepare_source busybox-${BUSYBOX_VERSION}
 
 make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
@@ -53,8 +55,6 @@ if [ "${LIBC_NAME}" = "musl" ]; then
 		oldconfig
 fi
 
-__patch_after_prepare busybox-${BUSYBOX_VERSION}
-
 make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
 	V=1 \
 	CROSS_COMPILE=${TARGET}- \
@@ -66,4 +66,5 @@ make -C ${BUILDDIR}/busybox-${BUSYBOX_VERSION} \
 	CROSS_COMPILE=${TARGET}- \
 	ARCH=${TARGET} \
 	CONFIG_ROOT=${ROOTDIR} \
+	CONFIG_PREFIX=${ROOTDIR} \
 	install
