@@ -144,22 +144,26 @@ __do_patch() {
 	local ddir=${2}
 
 	if ! which quilt > /dev/null 2>&1; then
-		error "quilt is not installed on the system"
+		error "patches: quilt is not installed on the system"
+	fi
+
+	if [ ! -d ${ddir} ]; then
+		error "patches: no output directory <${ddir}>"
 	fi
 
 	if [ -d ${pdir} ]; then
-		mkdir ${ddir}/patches
+		[ -f ${ddir}/.patched ] && return 0
+		mkdir -p ${ddir}/patches
 		cp ${pdir}/*.patch ${ddir}/patches/
 		(
 			cd ${ddir}/patches/
 			ls -1 *.patch > series
 			cd ${ddir}
-			quilt push -a
+			quilt push -a || {
+				error "patches: patch failed to apply on <${ddir}>"
+			}
+			touch ${ddir}/.patched
 		)
-	fi
-
-	if [ ! -d ${ddir}/.pc ]; then
-		error "no patch were applied in <${ddir}>"
 	fi
 }
 
