@@ -69,8 +69,3 @@ LINUX_DEF_CONFIG=multi_v7_defconfig
 # specific gcc configure options for both stage1 and stage2
 GCC_S1_CONFIGURE_ARGS="--with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16"
 GCC_S2_CONFIGURE_ARGS="--with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16"
-
-# we want to build u-boot as well
-UBOOT_VERSION=2014.01
-UBOOT_CPU=armv7
-UBOOT_ARCH=arm
