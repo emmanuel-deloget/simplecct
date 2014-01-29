@@ -38,3 +38,11 @@ if [ -n "${SABOTAGE_KH_VERSION}" ]; then
 		https://github.com/sabotage-linux/kernel-headers/archive/v${SABOTAGE_KH_VERSION}.tar.gz \
 		kernel-headers-${SABOTAGE_KH_VERSION}.tar.gz
 fi
+
+if [ -n "${UBOOT_VERSION}" ]; then
+	case ${TARGET} in
+	arm*)
+		__download_and_untar u-boot-${UBOOT_VERSION} ftp://ftp.denx.de/pub/u-boot/u-boot-${UBOOT_VERSION}.tar.bz2
+		;;
+	esac
+fi
