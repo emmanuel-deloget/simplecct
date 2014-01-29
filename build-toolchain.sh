@@ -41,7 +41,7 @@ options are:
 	end: stop doing anything after this option
 
 The following additions configuration are available:
-	$(cd configs && ls -1 *.sh | sed 's:\.sh::g')
+$(cd ${CONFDIR} && ls -1 *.sh | sed 's:\.sh::;s:^:\t:')
 EOF
 }
 
@@ -82,12 +82,15 @@ for opt in "$@"; do
 		;;
 	config=*)
 		cf=${opt##config=}
-		[ -f ${CONFDIR}/${cf}.sh ] && {
-			ln -s ${CONFDIR}/${cf}.sh user-config.sh
+		if [ -f ${CONFDIR}/${cf}.sh ]; then
+			if [ ! -L user-config.sh ]; then
+				error "user configuration cannot be changed, it's not a link"
+			fi
+			ln -sf ${CONFDIR}/${cf}.sh user-config.sh
 			. config.sh
-		} || {
+		else
 			error "configuration <${cf}> does not exist"
-		}
+		fi
 		;;
 	end)
 		exit 0

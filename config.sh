@@ -52,7 +52,7 @@ TOPDIR=$(pwd)
 DLDIR=${TOPDIR}/.download
 SRCDIR=${TOPDIR}/.source
 PATCHDIR=${TOPDIR}/patches
-CONFDIR=${TOPDIR}/configs
+CONFDIR=${TOPDIR}/sample-configs
 
 if [ -n "${TARGET}" ]; then
 	BUILDDIR=${TOPDIR}/.build/${TARGET}
