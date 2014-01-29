@@ -28,20 +28,21 @@ cat << EOF
 ${0}: build a cross compilation toolchain
 usage: ${0} [option]...
 options are:
-	help: this screen
-	nodl: do not download the needed files
-	nobinutils: do not build binutils
-	nostage1: do not build the stage 1 of gcc
-	nostage2: do not build the stage 2 of gcc
-	nolibc: do not build the standard C library
-	nokheaders: do not extract the kernel headers
-	norootfs: do not build the rootfs
-	clean: remove all generated files
-	config=CONFIG: use some premade additional configuration.
-	end: stop doing anything after this option
+	         help: displaythis screen.
 
-The following additions configuration are available:
-$(cd ${CONFDIR} && ls -1 *.sh | sed 's:\.sh::;s:^:\t:')
+	         nodl: do not download the needed files.
+	   nobinutils: do not build binutils.
+	     nostage1: do not build the stage 1 of gcc.
+	     nostage2: do not build the stage 2 of gcc.
+	       nolibc: do not build the standard C library.
+	   nokheaders: do not extract the kernel headers.
+	     norootfs: do not build the rootfs.
+
+	config=CONFIG: setup some premade configuration and quit.
+	               CONFIG is one of:
+$(cd ${CONFDIR} && ls -1 *.sh | sed 's:\.sh::;s:^:\t\t\t    :')
+
+	        clean: remove all generated files and quit.
 EOF
 }
 
@@ -79,6 +80,7 @@ for opt in "$@"; do
 	clean)
 		rm -rf ${STAGINGDIR} ${BUILDDIR} ${SRCDIR}/gcc-build ${SRCDIR}/gcc-stage*
 		[ -L user-config.sh ] && rm -f user-config.sh
+		exit 0
 		;;
 	config=*)
 		cf=${opt##config=}
@@ -91,8 +93,6 @@ for opt in "$@"; do
 		else
 			error "configuration <${cf}> does not exist"
 		fi
-		;;
-	end)
 		exit 0
 		;;
 	help)
